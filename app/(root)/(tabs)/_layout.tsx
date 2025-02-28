@@ -1,3 +1,4 @@
+import { TabIcon } from "@/components/TabIcon";
 import { Tabs } from "expo-router";
 
 const TabsLayout = () => {
@@ -19,13 +20,23 @@ const TabsLayout = () => {
         options={{
           title: "Home",
           headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon focused={focused} icon="House" title="Home" />
+          ),
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="share-reports"
         options={{
-          title: "Profile",
+          title: "Share Reports",
           headerShown: false,
+          tabBarIcon: ({ focused }) => (
+            <TabIcon
+              focused={focused}
+              icon="ClipboardPlus"
+              title="Share Reports"
+            />
+          ),
         }}
       />
     </Tabs>
