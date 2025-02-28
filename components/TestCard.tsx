@@ -1,32 +1,29 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Pressable, Modal } from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import Icon from "./Icon";
 import { formatWaitingTime } from "@/lib/utils";
-import Button from "./Button";
-
-interface Test {
-  testName: string;
-  testStatus: string;
-  waitingTime: string | null;
-  floorNumber: number;
-  roomNumber: number;
-  patientsInLine: number;
-}
+import { TestType } from "@/types";
 
 const TestCard = ({
   test,
   onMarkComplete,
 }: {
-  test: Test;
+  test: TestType;
   onMarkComplete: (testName: string) => void;
 }) => {
   const isCompleted = test.testStatus === "Completed";
   const formattedWaitingTime = formatWaitingTime(test.waitingTime);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const handleCardPress = () => {
+    if (!isCompleted) {
+      setModalVisible(true);
+    }
+  };
+
   return (
     <>
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
+      <TouchableOpacity onPress={handleCardPress}>
         <View
           className={`h-20 w-full rounded-md flex-row justify-between px-5 py-2 ${
             isCompleted ? "bg-[#CCFDE8]" : "border border-[#EB996E]"
@@ -77,9 +74,6 @@ const TestCard = ({
                 {test.roomNumber}
               </Text>
             </View>
-            {/* <Text className="text-gray-600">
-              Floor: {test.floorNumber}, Room: {test.roomNumber}
-            </Text> */}
           </View>
         </View>
       </TouchableOpacity>

@@ -3,6 +3,8 @@ import { Stack } from "expo-router";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import "./global.css";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { PaperProvider } from "react-native-paper";
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
@@ -24,5 +26,11 @@ export default function RootLayout() {
     return null;
   }
 
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <PaperProvider>
+      <AuthProvider>
+        <Stack screenOptions={{ headerShown: false }} />
+      </AuthProvider>
+    </PaperProvider>
+  );
 }

@@ -26,7 +26,15 @@ export type FormStateType = {
   name: string;
   mobile: string;
   gender: "male" | "female" | "other";
-  packageType: "individual" | "corporate"
+  packageType: "individual" | "corporate";
+};
+
+export type AuthContextType = {
+  user: FormStateType | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (userData: FormStateType) => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 export type TestType = {

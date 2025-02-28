@@ -2,12 +2,17 @@ import Header from "@/components/Header";
 import TestCard from "@/components/TestCard";
 import TestProgress from "@/components/TestProgress";
 import { tests as initialTests } from "@/constants/data";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState } from "react";
 import { Text, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
   const [tests, setTests] = useState(initialTests);
+
+  const { user } = useAuth();
+
+  const name = user?.name.split(" ")[0];
 
   const handleMarkComplete = (testName: string) => {
     setTests((prevTests) =>
@@ -32,7 +37,7 @@ const Home = () => {
         <View className="rounded-full w-[241px] h-[226px] top-20 -left-10  bg-[#d4e8e0c9] absolute -z-10"></View>
         <View className="flex-row px-6 mt-4 justify-between">
           <View className="gap-1">
-            <Text className="text-4xl font-rubik-semibold">Hii John!</Text>
+            <Text className="text-4xl font-rubik-semibold">Hii {name}!</Text>
             <Text className="font-rubik-medium text-lg text-zinc-500">
               Here Is Your Test Sequence
             </Text>

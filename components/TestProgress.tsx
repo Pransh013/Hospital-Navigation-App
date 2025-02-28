@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text } from "react-native";
-import { ProgressBar } from "react-native-paper";
 
 interface Test {
   testName: string;
@@ -21,17 +20,22 @@ const TestProgress = ({ tests }: TestProgressProps) => {
   };
 
   const { completedTests, totalTests } = calculateCompletionDetails(tests);
-  const completionPercentage = (completedTests / totalTests) * 100;
+  const progressWidth =
+    totalTests > 0 ? (completedTests / totalTests) * 100 : 0;
 
   return (
-    <View className="bg-white items-center rounded-lg w-32 h-16">
-      <Text className="font-rubik-bold">
+    <View className="bg-white items-center rounded-lg w-36 h-16 p-4 justify-center">
+      <Text className="font-rubik-bold mb-2">
         {completedTests} / {totalTests}
       </Text>
-      <ProgressBar
-        progress={completionPercentage / 100}
-        color="#3CC19A"
-      />
+
+      {/* Custom Progress Bar */}
+      <View className="w-full h-2.5 bg-zinc-200 rounded-md overflow-hidden">
+        <View
+          className="h-full bg-green rounded-md"
+          style={{ width: `${progressWidth}%` }}
+        />
+      </View>
     </View>
   );
 };

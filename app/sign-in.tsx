@@ -11,17 +11,30 @@ import { handleInputChange } from "@/lib/utils";
 import GenderSelect from "@/components/GenderSelect";
 import PackageTypeRadio from "@/components/PackageType";
 import Images from "@/constants/images";
+import { useAuth } from "@/contexts/AuthContext";
 
 const SignIn = () => {
   const [formState, setFormState] = useState<FormStateType>(initialFormState);
   const [formErrors, setFormErrors] = useState<any>([]);
 
-  const handleLogin = () => {
+  const { login } = useAuth();
+
+  const handleLogin = async () => {
     const result = formSchema.safeParse(formState);
     if (!result.success) {
       setFormErrors(result.error.errors);
       return;
     }
+
+    const userData = {
+      name: formState.name,
+      mobile: formState.mobile,
+      gender: formState.gender,
+      packageType: formState.packageType,
+      isAuthenticated: true,
+    };
+
+    await login(userData);
     router.replace("/");
   };
 
