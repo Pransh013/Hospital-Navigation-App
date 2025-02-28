@@ -1,3 +1,4 @@
+import Button from "@/components/Button";
 import Header from "@/components/Header";
 import TestCard from "@/components/TestCard";
 import TestProgress from "@/components/TestProgress";
@@ -9,9 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
   const [tests, setTests] = useState(initialTests);
-
   const { user } = useAuth();
-
   const name = user?.name.split(" ")[0];
 
   const handleMarkComplete = (testName: string) => {
@@ -29,9 +28,13 @@ const Home = () => {
     );
   };
 
+  const allTestsCompleted = tests.every(
+    (test) => test.testStatus === "Completed"
+  );
+
   return (
     <SafeAreaView className="bg-background-secondary flex-1 relative">
-      <ScrollView contentContainerClassName="flex-1 py-10">
+      <ScrollView contentContainerClassName="flex-1 py-10 items-center">
         <Header />
         <View className="rounded-full w-[241px] h-[226px] -right-14 -top-28  bg-[#d4e8e0ad] absolute -z-10"></View>
         <View className="rounded-full w-[241px] h-[226px] top-20 -left-10  bg-[#d4e8e0c9] absolute -z-10"></View>
@@ -44,7 +47,7 @@ const Home = () => {
           </View>
           <TestProgress tests={tests} />
         </View>
-        <View className="bg-white rounded-t-xl flex-1 w-full mt-4 px-4 pt-10 gap-4">
+        <View className="bg-white rounded-t-xl w-full mt-4 px-4 pt-10 gap-4">
           {tests.map((test, index) => (
             <TestCard
               onMarkComplete={handleMarkComplete}
@@ -53,6 +56,13 @@ const Home = () => {
             />
           ))}
         </View>
+        <Button
+          title="Proceed to Consultation"
+          onPress={() => {}}
+          buttonStyles="w-3/4 mt-10"
+          disabled={!allTestsCompleted}
+          titleStyles="text-white"
+        />
       </ScrollView>
     </SafeAreaView>
   );

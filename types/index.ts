@@ -5,6 +5,7 @@ export type ButtonProps = {
   onPress: () => void;
   buttonStyles?: string;
   titleStyles?: string;
+  disabled?: boolean;
 };
 
 export type IconProps = {
