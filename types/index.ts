@@ -26,6 +26,7 @@ export type FormInputProps = {
 export type FormStateType = {
   name: string;
   mobile: string;
+  email: string;
   gender: "male" | "female" | "other";
   packageType: "individual" | "corporate";
 };
@@ -45,4 +46,9 @@ export type TestType = {
   floorNumber: number;
   roomNumber: number;
   patientsInLine: number;
+};
+
+export type PackageTypeRadioProps = {
+  value: "individual" | "corporate";
+  onChange: (val: "individual" | "corporate") => void;
 };

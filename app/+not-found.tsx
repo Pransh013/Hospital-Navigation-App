@@ -8,7 +8,7 @@ export default function NotFoundScreen() {
       <Stack.Screen options={{ headerShown: false }} />
       <View className="flex-1 justify-center items-center">
         <Text className="text-xl">Oops! This screen doesn't exist.</Text>
-        <Link href="/(root)/(tabs)" className="underline text-blue-500">
+        <Link href="/" className="underline text-blue-500">
           Go to home screen
         </Link>
       </View>

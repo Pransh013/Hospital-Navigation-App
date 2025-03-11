@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const ShareReports = () => {
   return (
-    <SafeAreaView className="bg-background-secondary flex-1 py-10 px-2">
+    <SafeAreaView className="bg-background-secondary flex-1 py-10">
       <ScrollView contentContainerClassName="flex-1">
         <Header />
         <View className="mt-10 items-center justify-center px-10 gap-14 py-4">
@@ -40,8 +40,8 @@ const ShareReports = () => {
             <Button
               onPress={() => {}}
               title="View all Tests"
-              buttonStyles="bg-transparent py-0"
-              titleStyles="text-[#3CC19A]"
+              buttonStyles="bg-transparent"
+              titleStyles="text-[#3CC19A] border-b border-button-bg"
             />
             <Button
               onPress={() => {}}

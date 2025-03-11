@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Image } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "@/components/Button";
-import { router } from "expo-router";
+import { useRouter } from "expo-router";
 import { FormStateType } from "@/types";
 import FormInput from "@/components/FormInput";
 import { formSchema } from "@/schema";
@@ -16,7 +16,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const SignIn = () => {
   const [formState, setFormState] = useState<FormStateType>(initialFormState);
   const [formErrors, setFormErrors] = useState<any>([]);
-
+  const router = useRouter()
   const { login } = useAuth();
 
   const handleLogin = async () => {
@@ -29,6 +29,7 @@ const SignIn = () => {
     const userData = {
       name: formState.name,
       mobile: formState.mobile,
+      email: formState.email,
       gender: formState.gender,
       packageType: formState.packageType,
       isAuthenticated: true,
@@ -39,10 +40,10 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView className="bg-primary-background h-full py-10 px-4">
+    <SafeAreaView className="bg-primary-background h-full py-8 px-4">
       <ScrollView contentContainerClassName="h-full">
         <View className="h-full">
-          <Text className="text-center text-xl font-rubik mb-6">
+          <Text className="text-center text-xl font-rubik mb-5">
             Hospital Way Finder
           </Text>
 
@@ -70,21 +71,30 @@ const SignIn = () => {
             </View>
           </View>
 
-          <View className="bg-white rounded-lg py-6 px-4 gap-6">
+          <View className="bg-white rounded-lg py-5 px-4 gap-5">
             <FormInput
               label="Name"
-              placeholder="Enter you name"
+              placeholder="Enter your name"
               value={formState.name}
               onChange={(text) => handleInputChange("name", text, setFormState)}
             />
 
             <FormInput
               label="Mobile No."
-              placeholder="Enter you mobile no."
+              placeholder="Enter your mobile no."
               value={formState.mobile}
               keyboardType="phone-pad"
               onChange={(text) =>
                 handleInputChange("mobile", text, setFormState)
+              }
+            />
+
+            <FormInput
+              label="Email"
+              placeholder="Enter your email"
+              value={formState.email}
+              onChange={(text) =>
+                handleInputChange("email", text, setFormState)
               }
             />
 
@@ -107,7 +117,7 @@ const SignIn = () => {
             />
 
             {formErrors[0]?.message && (
-              <Text className="text-red-500 text-center font-rubik mt-1 text-lg">
+              <Text className="text-red-500 text-center font-rubik text-lg">
                 **{formErrors[0]?.message}
               </Text>
             )}

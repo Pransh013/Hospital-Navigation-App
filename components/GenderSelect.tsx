@@ -11,9 +11,13 @@ const GenderSelect = ({
 }) => {
   return (
     <View>
-      <Text className="mb-1 text-gray-700">Select Gender:</Text>
+      <Text className="mb-1 font-rubik ">Select Gender:</Text>
       <View className="border border-gray-300 rounded-md">
-        <Picker selectedValue={value} onValueChange={onChange}>
+        <Picker
+          selectedValue={value}
+          onValueChange={onChange}
+          style={{ height: 50 }}
+        >
           <Picker.Item label="Male" value="male" />
           <Picker.Item label="Female" value="female" />
           <Picker.Item label="Other" value="other" />

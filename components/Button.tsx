@@ -15,7 +15,7 @@ const Button = ({
       accessibilityRole="button"
       className={`${
         disabled ? "bg-gray" : "bg-button-bg"
-      } rounded-lg w-full py-4 ${buttonStyles}`}
+      } rounded-lg items-center justify-center py-4 ${buttonStyles}`}
       disabled={disabled}
     >
       <Text className={`text-lg text-center font-rubik-medium ${titleStyles}`}>
