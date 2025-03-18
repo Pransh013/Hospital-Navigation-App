@@ -2,10 +2,118 @@ import Button from "@/components/Button";
 import Header from "@/components/Header";
 import Icon from "@/components/Icon";
 import Images from "@/constants/images";
-import { Image, ScrollView, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Alert, Image, Platform, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as FileSystem from "expo-file-system";
+import * as Sharing from "expo-sharing";
+import * as MailComposer from "expo-mail-composer";
+import * as WebBrowser from "expo-web-browser";
+
+const REPORT_URL =
+  "https://drive.google.com/uc?export=download&id=1arQHpStc1de23PljBwg65Votpb-9mlo2";
 
 const ShareReports = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [localReportUri, setLocalReportUri] = useState<string | null>(null);
+  const router = useRouter();
+
+  const ensureReportDownloaded = async () => {
+    try {
+      if (localReportUri) {
+        const fileInfo = await FileSystem.getInfoAsync(localReportUri);
+        if (fileInfo.exists) {
+          return localReportUri;
+        }
+      }
+
+      setIsLoading(true);
+
+      const reportsDir = `${FileSystem.documentDirectory}reports/`;
+      const dirInfo = await FileSystem.getInfoAsync(reportsDir);
+
+      if (!dirInfo.exists) {
+        await FileSystem.makeDirectoryAsync(reportsDir, {
+          intermediates: true,
+        });
+      }
+
+      const destinationUri = `${reportsDir}medical-report.pdf`;
+
+      const downloadResumable = FileSystem.createDownloadResumable(
+        REPORT_URL,
+        destinationUri
+      );
+
+      const result = await downloadResumable.downloadAsync();
+      if (!result || !result.uri) {
+        setIsLoading(false);
+        Alert.alert(
+          "Download Error",
+          "Failed to download the report. Please try again."
+        );
+        return;
+      }
+      setLocalReportUri(result.uri);
+      setIsLoading(false);
+
+      return result.uri;
+    } catch (error) {
+      setIsLoading(false);
+      console.error("Error downloading report:", error);
+      Alert.alert(
+        "Download Error",
+        "Failed to download the report. Please check your internet connection."
+      );
+      return null;
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      const reportUri = await ensureReportDownloaded();
+      if (!reportUri) return;
+      await Sharing.shareAsync(reportUri);
+    } catch (error) {
+      console.error("Error in download:", error);
+      Alert.alert("Error", "Failed to save the report");
+    }
+  };
+
+  const handleEmailShare = async () => {
+    try {
+      const reportUri = await ensureReportDownloaded();
+      if (!reportUri) return;
+
+      const isAvailable = await MailComposer.isAvailableAsync();
+
+      if (isAvailable) {
+        await MailComposer.composeAsync({
+          subject: "Your Medical Report",
+          body: "Please find your medical report attached.",
+          attachments: [reportUri],
+        });
+      } else {
+        Alert.alert(
+          "Email Not Available",
+          "No email client is configured on this device."
+        );
+      }
+    } catch (error) {
+      console.error("Error in email share:", error);
+      Alert.alert("Error", "Failed to share via email");
+    }
+  };
+
+  const handleViewAllTests = () => {
+    router.push("/");
+  };
+
+  const handleBookAnotherTest = () => {
+    router.push("/");
+  };
+
   return (
     <SafeAreaView className="bg-background-secondary flex-1 py-10">
       <ScrollView contentContainerClassName="flex-1">
@@ -26,25 +134,25 @@ const ShareReports = () => {
           </View>
           <View className="w-full gap-6">
             <Button
-              onPress={() => {}}
+              onPress={handleDownload}
               title="Download Reports"
               buttonStyles="w-full"
               titleStyles="text-white"
             />
             <Button
-              onPress={() => {}}
+              onPress={handleEmailShare}
               title="Share Reports on Email"
               buttonStyles="bg-transparent border border-button-bg"
               titleStyles="text-[#3CC19A]"
             />
             <Button
-              onPress={() => {}}
+              onPress={handleViewAllTests}
               title="View all Tests"
               buttonStyles="bg-transparent"
               titleStyles="text-[#3CC19A] border-b border-button-bg"
             />
             <Button
-              onPress={() => {}}
+              onPress={handleBookAnotherTest}
               title="Book Another Test"
               buttonStyles="bg-transparent border border-button-bg"
               titleStyles="text-[#3CC19A]"
